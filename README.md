@@ -26,7 +26,7 @@ This entire migration can be fully demonstrated using the automated script:
 ./traefik_nginx_migration.sh
 ```
 
-This script will walk you through the complete process of setting up the cluster, deploying NGINX, migrating to Traefik, and testing each step.
+This script will walk you through the complete process of generating certificates, setting up the cluster, deploying NGINX, migrating to Traefik, and testing each step.
 
 Alternatively, you can also perform the migration step by step using the following commands in the CLI:
 
@@ -38,6 +38,22 @@ Before starting, ensure you have the following tools installed:
 - k3d
 - kubectl
 - curl
+- openssl
+
+### Step 0: Generate TLS Certificates
+
+Since the certificates are not included in the repository, you need to generate them first:
+
+```bash
+# Create the certs directory if it doesn't exist
+mkdir -p certs
+
+# Generate a private key
+openssl genrsa -out certs/external-key.pem 2048
+
+# Generate a self-signed certificate
+openssl req -new -x509 -key certs/external-key.pem -out certs/external-crt.pem -days 365 -subj "/CN=whoami.docker.localhost"
+```
 
 ### Step 1: Set up the K3s Cluster
 
