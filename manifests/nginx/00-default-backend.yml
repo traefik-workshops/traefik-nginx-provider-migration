@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami-default-backend
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami-default-backend
+
+  template:
+    metadata:
+      labels:
+        app: whoami-default-backend
+
+    spec:
+      containers:
+        - name: whoami-default-backend
+          image: traefik/whoami
+          args:
+            - "--name=whoami-default-backend"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami-default-backend
+
+spec:
+  selector:
+    app: whoami-default-backend
+
+  ports:
+    - name: http
+      port: 80
