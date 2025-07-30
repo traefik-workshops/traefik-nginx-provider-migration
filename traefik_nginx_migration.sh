@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Traefik NGinX Provider Demo Script
-# A comprehensive demonstration of setting up Traefik with NGinX provider
+# Traefik NGINX Provider Demo Script
+# A comprehensive demonstration of setting up Traefik with NGINX provider
 
 set -e  # Exit on any error
 
@@ -177,9 +177,9 @@ cleanup() {
         kubectl delete -f manifests/ingress --ignore-not-found=true || true
     fi
     
-    # Clean up NGinX (in case it's still there)
+    # Clean up NGINX (in case it's still there)
     if [[ -d "manifests/nginx" ]]; then
-        print_info "Removing NGinX resources..."
+        print_info "Removing NGINX resources..."
         kubectl delete -f manifests/nginx --ignore-not-found=true || true
     fi
     
@@ -226,8 +226,8 @@ main() {
 ║                                                               ║
 ║   🚀 TRAEFIK NGINX PROVIDER DEMONSTRATION 🚀                  ║
 ║                                                               ║
-║   This script demonstrates the transition from NGinX          ║
-║   Ingress Controller to Traefik with NGinX provider           ║
+║   This script demonstrates the transition from NGINX          ║
+║   Ingress Controller to Traefik with NGINX provider           ║
 ║                                                               ║
 ╚═══════════════════════════════════════════════════════════════╝
 EOF
@@ -288,7 +288,7 @@ EOF
     
     print_step "📦 STEP 1: SET UP ENVIRONMENT"
     
-    print_info "Creating NGinX IngressClass..."
+    print_info "Creating NGINX IngressClass..."
     if [[ -d "manifests/ingressclass" ]]; then
         kubectl apply -f manifests/ingressclass
         print_success "IngressClass applied!"
@@ -316,16 +316,16 @@ EOF
         print_warning "Certificate files not found at $CERT_PATH and $KEY_PATH"
     fi
     
-    print_info "Installing NGinX Ingress Controller..."
+    print_info "Installing NGINX Ingress Controller..."
     if [[ -d "manifests/nginx" ]]; then
         kubectl apply -f manifests/nginx
-        print_success "NGinX manifests applied!"
+        print_success "NGINX manifests applied!"
         
-        # Wait for NGinX to be ready
+        # Wait for NGINX to be ready
         sleep 5
         wait_for_deployment "$NAMESPACE" "nginx-ingress-controller" 120
     else
-        print_warning "NGinX manifests not found at manifests/nginx"
+        print_warning "NGINX manifests not found at manifests/nginx"
     fi
     
     print_info "Deploying the ingress configuration..."
@@ -337,9 +337,9 @@ EOF
         print_warning "Ingress manifests not found at manifests/ingress"
     fi
     
-    print_info "Testing backend accessibility through NGinX..."
-    sleep 5  # Give NGinX time to process the ingress
-    test_endpoint "$BACKEND_URL" "200" "Backend through NGinX Ingress"
+    print_info "Testing backend accessibility through NGINX..."
+    sleep 5  # Give NGINX time to process the ingress
+    test_endpoint "$BACKEND_URL" "200" "Backend through NGINX Ingress"
     
     wait_for_user
     
@@ -349,22 +349,24 @@ EOF
     
     print_step "🗑️  STEP 3: UNINSTALL NGINX INGRESS"
     
-    print_info "Uninstalling NGinX Ingress Controller..."
+    print_info "Uninstalling NGINX Ingress Controller..."
     if [[ -d "manifests/nginx" ]]; then
         kubectl delete -f manifests/nginx --ignore-not-found=true
-        print_success "NGinX Ingress Controller removed!"
+        print_success "NGINX Ingress Controller removed!"
     fi
     
-    print_info "Waiting for NGinX pods to terminate..."
+    print_info "Waiting for NGINX pods to terminate..."
     sleep 5
     
-    print_info "Checking what remains after NGinX controller removal..."
+    print_info "Checking what remains after NGINX controller removal..."
     echo -e "${PURPLE}kubectl get ingress -A${NC}"
     kubectl get ingress -A 2>/dev/null || echo "No ingresses found"
     echo ""
     
-    print_success "✨ Notice: The NGinX Ingress resources are still present!"
-    print_info "🔑 Only the NGinX controller (pods/services) was removed, not the ingress definitions"
+    print_success "🔑 CRITICAL INSIGHT: The NGINX Ingress resources are still present!"
+    print_info "   📋 Only the NGINX controller (pods/services) was removed"
+    print_info "   📋 The ingress definitions remain completely UNTOUCHED"
+    print_info "   📋 This enables seamless migration to Traefik"
     
     print_info "Testing backend accessibility (should fail now)..."
     if test_endpoint "$BACKEND_URL" "200" "Backend without any ingress controller"; then
@@ -382,7 +384,7 @@ EOF
     
     print_step "🌟 STEP 4: INSTALL TRAEFIK WITH NGINX PROVIDER"
     
-    print_info "Installing Traefik with NGinX provider ..."
+    print_info "Installing Traefik with NGINX provider ..."
     if [[ -d "manifests/traefik" ]]; then
         kubectl apply -f manifests/traefik
         print_success "Traefik manifests applied!"
@@ -396,11 +398,12 @@ EOF
     
     print_info "Testing backend accessibility through Traefik..."
     sleep 5  # Give Traefik time to discover the ingress
-    test_endpoint "$BACKEND_URL" "200" "Backend through Traefik with NGinX provider"
+    test_endpoint "$BACKEND_URL" "200" "Backend through Traefik with NGINX provider"
     
-    print_success "🎉 Backend is now accessible through Traefik with NGinX provider!"
-    print_info "✨ Notice: The NGinX Ingress resources were NOT removed or modified!"
-    print_info "🔄 Traefik automatically discovered and processed the existing NGinX Ingress"
+    print_success "🎉 SEAMLESS MIGRATION COMPLETE: Backend accessible through Traefik!"
+    print_info "🔄 Existing NGINX ingress resources processed automatically"
+    print_info "   📋 No ingress modifications required"
+    print_info "   📋 Traefik discovered and processed all existing NGINX ingress definitions"
     print_info "Take a moment to review the response above..."
     sleep 5  # Give user time to read the response
     
@@ -416,16 +419,16 @@ EOF
 ║                    🎯 SUMMARY                                 ║
 ║                                                               ║
 ║  ✅ Verified cluster connection and setup                     ║
-║  ✅ NGinX Ingress Controller deployed and tested              ║
-║  ✅ NGinX Controller removed - backend became inaccessible    ║
-║  ✅ Traefik with NGinX provider deployed                      ║
+║  ✅ NGINX Ingress Controller deployed and tested              ║
+║  ✅ NGINX Controller removed - backend became inaccessible    ║
+║  ✅ Traefik with NGINX provider deployed                      ║
 ║  ✅ Backend accessible again through Traefik                  ║
 ║                                                               ║
-║  🔑 KEY INSIGHT: The NGinX Ingress resources remained         ║
+║  🔑 KEY INSIGHT: The NGINX Ingress resources remained         ║
 ║     unchanged! Traefik automatically discovered and           ║
-║     processed them using its NGinX provider.                  ║
+║     processed them using its NGINX provider.                  ║
 ║                                                               ║
-║  This enables seamless migration from NGinX to Traefik        ║
+║  This enables seamless migration from NGINX to Traefik        ║
 ║  without modifying existing ingress configurations!           ║
 ╚═══════════════════════════════════════════════════════════════╝
 EOF
@@ -434,10 +437,10 @@ EOF
     print_info "Available endpoints:"
     echo -e "${CYAN}  🌐 Backend: $BACKEND_URL${NC}"
     
-    print_info "To explore the NGinX provider integration:"
-    echo -e "${YELLOW}  kubectl get ingress -A${NC} ${WHITE}# Show existing NGinX ingress resources${NC}"
+    print_info "To explore the NGINX provider integration:"
+    echo -e "${YELLOW}  kubectl get ingress -A${NC} ${WHITE}# Show existing NGINX ingress resources${NC}"
     echo -e "${YELLOW}  kubectl describe ingress -n $NAMESPACE${NC} ${WHITE}# View ingress details${NC}"
-    echo -e "${YELLOW}  kubectl logs -n $NAMESPACE deployment/traefik${NC} ${WHITE}# See Traefik discovering NGinX ingresses${NC}"
+    echo -e "${YELLOW}  kubectl logs -n $NAMESPACE deployment/traefik${NC} ${WHITE}# See Traefik discovering NGINX ingresses${NC}"
     
     echo -e "\n${WHITE}Press Enter to cleanup deployed resources and exit, or Ctrl+C to keep the environment running...${NC}"
     read -r
