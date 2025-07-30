@@ -116,7 +116,7 @@ kubectl port-forward -n default svc/traefik 8888:8080 &
 curl -k http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
 
-> **🔄 Seamless Migration**: The backend is now accessible again! Traefik automatically discovered and processed the existing NGINX ingress resources **without any modifications**. This demonstrates zero-downtime migration from NGINX to Traefik.
+> **🔄 Seamless Migration**: The backend is now accessible again! Traefik automatically discovered and processed the existing NGINX ingress resources **without any modifications**. This demonstrates migration from NGINX to Traefik.
 ## Repository Structure
 
 ```
