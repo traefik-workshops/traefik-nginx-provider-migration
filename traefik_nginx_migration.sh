@@ -192,6 +192,15 @@ cleanup() {
     # Clean up TLS secret
     kubectl delete secret external-certs --namespace "$NAMESPACE" --ignore-not-found=true || true
     
+    # Clean up generated certificates
+    if [[ -f "$CERT_PATH" || -f "$KEY_PATH" ]]; then
+        print_info "Removing generated certificates..."
+        rm -f "$CERT_PATH" "$KEY_PATH"
+        # Remove certs directory if it's empty
+        rmdir certs 2>/dev/null || true
+        print_success "Generated certificates removed!"
+    fi
+    
     # Delete the k3d cluster
     print_info "Deleting k3d cluster: $CLUSTER_NAME"
     if k3d cluster list | grep -q "$CLUSTER_NAME"; then
@@ -228,6 +237,37 @@ EOF
     check_command "k3d"
     check_command "kubectl"
     check_command "curl"
+    check_command "openssl"
+    
+    wait_for_user
+    
+    # ============================================================================
+    # STEP -1: GENERATE TLS CERTIFICATES
+    # ============================================================================
+    
+    print_step "🔐 STEP -1: GENERATE TLS CERTIFICATES"
+    
+    print_info "Checking if certificates already exist..."
+    if [[ -f "$CERT_PATH" && -f "$KEY_PATH" ]]; then
+        print_success "Certificates already exist, skipping generation..."
+    else
+        print_info "Generating TLS certificates for the demo..."
+        
+        # Create certs directory if it doesn't exist
+        mkdir -p certs
+        
+        print_info "Creating private key..."
+        echo -e "${PURPLE}openssl genrsa -out $KEY_PATH 2048${NC}"
+        openssl genrsa -out "$KEY_PATH" 2048
+        
+        print_info "Creating self-signed certificate..."
+        echo -e "${PURPLE}openssl req -new -x509 -key $KEY_PATH -out $CERT_PATH -days 365 -subj \"/CN=whoami.docker.localhost\"${NC}"
+        openssl req -new -x509 -key "$KEY_PATH" -out "$CERT_PATH" -days 365 -subj "/CN=whoami.docker.localhost"
+        
+        print_success "TLS certificates generated successfully!"
+        print_info "📄 Certificate: $CERT_PATH"
+        print_info "🔑 Private Key: $KEY_PATH"
+    fi
     
     wait_for_user
     

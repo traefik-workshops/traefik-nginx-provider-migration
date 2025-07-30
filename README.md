@@ -86,7 +86,7 @@ kubectl apply -f manifests/nginx
 kubectl apply -f manifests/ingress
 
 # Test the backend is reachable
-curl -k http://whoami.docker.localhost -L -u "user:password" --location-trusted
+curl http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
 
 ### Step 3: Remove NGINX Ingress Controller
