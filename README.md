@@ -16,8 +16,8 @@ This demonstration illustrates:
 1. **Initial Setup**: Creating a K3s cluster with Traefik disabled
 2. **NGINX Deployment**: Setting up NGINX Ingress Controller with TLS certificates
 3. **Service Verification**: Confirming the backend service is accessible
-4. **Migration**: Removing NGINX and installing Traefik with the NGINX provider
-5. **Seamless Transition**: Showing how existing NGINX Ingress resources work with Traefik
+4. **Controller Migration**: Removing only the NGINX controller (ingress definitions remain untouched)
+5. **Zero-Downtime Transition**: Installing Traefik which automatically processes existing NGINX ingress resources
 
 
 ## Quick Demo
@@ -101,6 +101,8 @@ kubectl delete -f manifests/nginx
 curl -k http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
 
+> **🔑 Key Point**: Notice that we only removed the NGINX controller deployment, **NOT the ingress resources**. The ingress definitions remain completely untouched and will be automatically discovered by Traefik in the next step.
+
 ### Step 4: Install Traefik with NGINX Provider
 
 ```bash
@@ -113,6 +115,8 @@ kubectl port-forward -n default svc/traefik 8888:8080 &
 # Test the backend is reachable again through Traefik
 curl -k http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
+
+> **🔄 Seamless Migration**: The backend is now accessible again! Traefik automatically discovered and processed the existing NGINX ingress resources **without any modifications**. This demonstrates zero-downtime migration from NGINX to Traefik.
 ## Repository Structure
 
 ```
