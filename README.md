@@ -86,7 +86,7 @@ kubectl apply -f manifests/nginx
 kubectl apply -f manifests/ingress
 
 # Test the backend is reachable
-curl http://whoami.docker.localhost -L -u "user:password" --location-trusted
+curl -k http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
 
 ### Step 3: Remove NGINX Ingress Controller
@@ -96,7 +96,7 @@ curl http://whoami.docker.localhost -L -u "user:password" --location-trusted
 kubectl delete -f manifests/nginx
 
 # Verify the backend is no longer reachable
-curl http://whoami.docker.localhost -L -u "user:password" --location-trusted
+curl -k http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
 
 ### Step 4: Install Traefik with NGINX Provider
@@ -109,7 +109,7 @@ kubectl apply -f manifests/traefik
 kubectl port-forward -n default svc/traefik 8888:8080 &
 
 # Test the backend is reachable again through Traefik
-curl http://whoami.docker.localhost -L -u "user:password" --location-trusted
+curl -k http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
 ## Repository Structure
 
