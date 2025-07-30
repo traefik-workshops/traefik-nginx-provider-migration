@@ -4,10 +4,19 @@ This repository demonstrates how to migrate from NGINX Ingress Controller to Tra
 
 ## Related Blog Posts
 
-- [Transition from Ingress NGINX to Traefik](https://traefik.io/blog/transition-from-ingress-nginx-to-traefik)
+- [The Great Kubernetes Ingress Transition: From ingress-nginx EoL to Modern Cloud-Native](https://traefik.io/blog/transition-from-ingress-nginx-to-traefik)
 - [Traefik Proxy v3.5](https://traefik.io/blog/traefik-proxy-v3-5)
 
-![Ingress Transition Overview](ingress-transition-blog-no-copy.jpg)
+## What This Demo Shows
+
+This demonstration illustrates:
+
+1. **Initial Setup**: Creating a K3s cluster with Traefik disabled
+2. **NGINX Deployment**: Setting up NGINX Ingress Controller with TLS certificates
+3. **Service Verification**: Confirming the backend service is accessible
+4. **Migration**: Removing NGINX and installing Traefik with the NGINX provider
+5. **Seamless Transition**: Showing how existing NGINX Ingress resources work with Traefik
+
 
 ## Quick Demo
 
@@ -86,17 +95,6 @@ kubectl port-forward -n default svc/traefik 8888:8080 &
 # Test the backend is reachable again through Traefik
 curl http://whoami.docker.localhost -L -u "user:password" --location-trusted
 ```
-
-## What This Demo Shows
-
-This demonstration illustrates:
-
-1. **Initial Setup**: Creating a K3s cluster with Traefik disabled
-2. **NGINX Deployment**: Setting up NGINX Ingress Controller with TLS certificates
-3. **Service Verification**: Confirming the backend service is accessible
-4. **Migration**: Removing NGINX and installing Traefik with the NGINX provider
-5. **Seamless Transition**: Showing how existing NGINX Ingress resources work with Traefik
-
 ## Repository Structure
 
 ```
@@ -110,10 +108,3 @@ This demonstration illustrates:
 ├── traefik_nginx_migration.sh  # Automated demo script
 └── README.md
 ```
-
-## Notes
-
-- The Traefik NGINX provider is an **experimental feature**
-- The demo uses self-signed certificates for TLS
-- The backend service (`whoami`) is deployed as part of the ingress manifests
-- Basic authentication is configured with username `user` and password `password`
