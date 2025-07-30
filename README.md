@@ -7,6 +7,8 @@ This repository demonstrates how to migrate from NGINX Ingress Controller to Tra
 - [The Great Kubernetes Ingress Transition: From ingress-nginx EoL to Modern Cloud-Native](https://traefik.io/blog/transition-from-ingress-nginx-to-traefik)
 - [Traefik Proxy v3.5](https://traefik.io/blog/traefik-proxy-v3-5)
 
+![Ingress Transition Overview](ingress-transition-blog-no-copy.jpg)
+
 ## What This Demo Shows
 
 This demonstration illustrates:
