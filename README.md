@@ -9,6 +9,8 @@ This repository demonstrates how to migrate from NGINX Ingress Controller to Tra
 
 ![Ingress Transition Overview](ingress-transition-blog-no-copy.jpg)
 
+- [Traefik Proxy v.3.6](https://traefik.io/blog/traefik-proxy-3-6-ramequin)
+
 ## What This Demo Shows
 
 This demonstration illustrates:
